@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>jQuery UI Dialog - Modal form</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://jqueryui.com/dialog/#modal-form/resources/demos/style.css">
+  <style> 
+  /* <link rel="stylesheet" href="/resources/demos/style.css"> */
   <style>
     label, input { display:block; }
     input.text { margin-bottom:12px; width:95%; padding: .4em; }
@@ -25,11 +27,11 @@
  
       // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
      
-      ProjectName = $( "#projectName" ),
+      projectName = $( "#projectName" ),
       projectType = $( "#projectType" ),
       hourlyRate = $( "#hourlyRate" ),
       dueDate = $( "#dueDate" ),
-      allFields = $( [] ).add( ProjectName ).add( projectType ).add( hourlyRate ).add( dueDate ),
+      allFields = $( [] ).add( projectName ).add( projectType ).add( hourlyRate ).add( dueDate ),
       tips = $( ".validateTips" );
  
     function updateTips( t ) {
@@ -62,28 +64,31 @@
       }
     }
  
-    function addUser() {
+    function addProject() {
       var valid = true;
       allFields.removeClass( "ui-state-error" );
  
-      valid = valid && checkLength( name, "username", 3, 16 );
-      valid = valid && checkLength( email, "email", 6, 80 );
-      valid = valid && checkLength( password, "password", 5, 16 );
+    //   valid = valid && checkLength( name, "username", 3, 16 );
+    //   valid = valid && checkLength( email, "email", 6, 80 );
+    //   valid = valid && checkLength( password, "password", 5, 16 );
  
-      valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
-      valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
-      valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
+    //   valid = valid && checkRegexp( name, /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );
+    //   valid = valid && checkRegexp( email, emailRegex, "eg. ui@jquery.com" );
+    //   valid = valid && checkRegexp( password, /^([0-9a-zA-Z])+$/, "Password field only allow : a-z 0-9" );
  
       if ( valid ) {
-        $( "#users tbody" ).append( "<tr>" +
-          "<td>" + name.val() + "</td>" +
-          "<td>" + email.val() + "</td>" +
-          "<td>" + password.val() + "</td>" +
+        $( "#projectList tbody" ).append( "<tr>" +
+          "<td>" + projectName.val() + "</td>" +
+          "<td>" + projectType.val() + "</td>" +
+          "<td>" + hourlyRate.val() + "</td>" +
+          "<td>" + dueDate.val() + "</td>" +
         "</tr>" );
         dialog.dialog( "close" );
       }
       return valid;
     }
+
+
  
     dialog = $( "#dialog-form" ).dialog({
       autoOpen: false,
@@ -91,7 +96,7 @@
       width: 350,
       modal: true,
       buttons: {
-        "Create an account": addUser,
+        "Submit Project Info": addProject,
         Cancel: function() {
           dialog.dialog( "close" );
         }
@@ -104,10 +109,10 @@
  
     form = dialog.find( "form" ).on( "submit", function( event ) {
       event.preventDefault();
-      addUser();
+      addProject();
     });
  
-    $( "#create-user" ).button().on( "click", function() {
+    $( "#create-project" ).button().on( "click", function() {
       dialog.dialog( "open" );
     });
   } );
@@ -115,17 +120,21 @@
 </head>
 <body>
  
-<div id="dialog-form" title="Create new user">
+<div id="dialog-form" title="Create new project">
   <p class="validateTips">All form fields are required.</p>
- 
   <form>
     <fieldset>
-      <label for="name">Name</label>
-      <input type="text" name="name" id="name" value="Jane Smith" class="text ui-widget-content ui-corner-all">
-      <label for="email">Email</label>
-      <input type="text" name="email" id="email" value="jane@smith.com" class="text ui-widget-content ui-corner-all">
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" value="xxxxxxx" class="text ui-widget-content ui-corner-all">
+      <label for="projectName">Project Name</label>
+      <input type="text" name="projectName" id="projectName" value="Project" class="text ui-widget-content ui-corner-all">
+
+      <label for="projectType">Email</label>
+      <input type="text" name="Project Type" id="projectType" value="Project Type" class="text ui-widget-content ui-corner-all">
+
+      <label for="hourlyRate">Hourly Rate</label>
+      <input type="text" name="hourlyRate" id="hourlyRate" value="100" class="text ui-widget-content ui-corner-all">
+
+      <label for="dueDate">Due Date</label>
+      <input type="text" name="dueDate" id="dueDate" value="10/10/22" class="text ui-widget-content ui-corner-all">
  
       <!-- Allow form submission with keyboard without duplicating the dialog button -->
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
@@ -133,15 +142,17 @@
   </form>
 </div>
  
+
  
-<div id="users-contain" class="ui-widget">
-  <h1>Existing Users:</h1>
-  <table id="users" class="ui-widget ui-widget-content">
+<div id="project-contain" class="ui-widget">
+  <h1>Existing Projects:</h1>
+  <table id="projectList" class="ui-widget ui-widget-content">
     <thead>
       <tr class="ui-widget-header ">
-        <th>Name</th>
-        <th>Email</th>
-        <th>Password</th>
+        <th>Project Name</th>
+        <th>Project Type</th>
+        <th>Hourly Rate</th>
+        <th>Due Date</th>
       </tr>
     </thead>
     <tbody>
@@ -149,11 +160,12 @@
         <td>John Doe</td>
         <td>john.doe@example.com</td>
         <td>johndoe1</td>
+        <td>johndoe1</td>
       </tr>
     </tbody>
   </table>
 </div>
-<button id="create-user">Create new user</button>
+<button id="create-project">Create new user</button>
  
  
 </body>
