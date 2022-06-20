@@ -1,0 +1,14 @@
+#projectList {
+    background-color: black;
+    color: white;
+}
+
+#projectList th {
+    background-color: grey;
+    color: white;
+}
+
+
+th {
+    color: green
+}
